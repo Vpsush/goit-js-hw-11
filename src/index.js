@@ -18,16 +18,21 @@ writeInForm.addEventListener('submit', onSearch);
 function onSearch(e) {
   e.preventDefault();
 
-  const searchQuery = e.currentTarget.elements.query.value;
+  const searchQuery = e.currentTarget.elements.searchQuery.value;
 
   const options = {
     headers: {
       Authorization: '39094662-f0479bb8b89274a4b188f6f08',
     },
   };
-  const url = `https://pixabay.com/api/?key=39094662-f0479bb8b89274a4b188f6f08&q=${searchQuery}&image_type=photo&per_page=10&page=1`;
+  const url = `https://pixabay.com/api/?key=39094662-f0479bb8b89274a4b188f6f08&q=${searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=10&page=1`;
 
   fetch(url, options)
     .then(r => r.json())
-    .then(console.log);
+    .then(console.log)
+    .catch(error => {
+      Notiflix.Notify.failure(
+        'Sorry, there are no images matching your search query. Please try again.'
+      );
+    });
 }
