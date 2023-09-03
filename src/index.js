@@ -27,14 +27,15 @@ async function onSearch(e) {
   // };
   const url = `https://pixabay.com/api/?key=39094662-f0479bb8b89274a4b188f6f08&q=${searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=10&page=1`;
 
-  const fetchByUrl = await fetch(url, options)
-    .then(r => r.json())
-    .then(console.log)
-    .catch(error => {
-      Notiflix.Notify.failure(
-        'Sorry, there are no images matching your search query. Please try again.'
-      );
-      const information = await fetchByUrl.json();
-      return information
-    });
+  try {
+    const fetchByUrl = await fetch(url)
+      .then(r => r.json())
+      .then(console.log);
+    const information = await fetchByUrl.json();
+    return information;
+  } catch (error) {
+    Notiflix.Notify.failure(
+      'Sorry, there are no images matching your search query. Please try again.'
+    );
+  }
 }
