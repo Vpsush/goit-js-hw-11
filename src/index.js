@@ -17,4 +17,17 @@ writeInForm.addEventListener('submit', onSearch);
 
 function onSearch(e) {
   e.preventDefault();
+
+  const searchQuery = e.currentTarget.elements.query.value;
+
+  const options = {
+    headers: {
+      Authorization: '39094662-f0479bb8b89274a4b188f6f08',
+    },
+  };
+  const url = `https://pixabay.com/api/?key=39094662-f0479bb8b89274a4b188f6f08&q=yellow+flowers&image_type=photo&per_page=10&page=1`;
+
+  fetch(url, options)
+    .then(r => r.json())
+    .then(console.log);
 }
