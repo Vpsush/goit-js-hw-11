@@ -20,7 +20,6 @@ function searchSubmitPictures(e) {
   newsApiService.resetPage();
   newsApiService.fetchArticles().then;
 }
-
 function loadMore() {
   newsApiService.fetchArticles();
 }

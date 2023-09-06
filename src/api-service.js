@@ -17,8 +17,6 @@ export default class newsApiService {
   }
 
   async fetchArticles() {
-    // console.log(this);
-
     const url = `?&q=${this.searchQuery}&page=${this.page}`;
 
     const fetchByUrl = await axios.get(url);
