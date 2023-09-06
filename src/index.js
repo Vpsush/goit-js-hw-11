@@ -23,7 +23,6 @@ function searchSubmitPictures(e) {
 function loadMore() {
   newsApiService.fetchArticles();
 }
-
 fetchArticles()
   .then(pictures => renderList(pictures))
   .catch(error => console.log(error));
