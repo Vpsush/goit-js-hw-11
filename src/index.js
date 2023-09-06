@@ -1,51 +1,39 @@
 import './sass/_common.scss';
+import { fetchArticles } from './api-service';
 import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
-import axios from 'axios';
-axios.defaults.headers.common['x-api-key'] =
-  '39094662-f0479bb8b89274a4b188f6f08';
+import NewsApiService from './api-service';
+// axios.defaults.headers.common['x-api-key'] =
+//   '39094662-f0479bb8b89274a4b188f6f08';
 
 const writeInForm = document.querySelector('#search-form');
-const galleryFill = document.createElement('div');
-galleryFill.class = 'gallery';
+const galleryFill = document.querySelector('.gallery');
+const loadMoreBtn = document.querySelector('.load-more');
+const newsApiService = new NewsApiService();
 
-const BASE_URL = 'https://pixabay.com/api/';
-const MY_API = '39094662-f0479bb8b89274a4b188f6f08';
+writeInForm.addEventListener('submit', searchSubmitPictures);
+loadMoreBtn.addEventListener('click', loadMore);
 
-//pixabay.com/api/?key={ KEY }&q=yellow+flowers&image_type=photo
-// https://pixabay.com/api/?key=39094662-f0479bb8b89274a4b188f6f08&q=yellow+flowers&image_type=photo
-
-writeInForm.addEventListener('submit', onSearch);
-
-async function onSearch(e) {
+function searchSubmitPictures(e) {
   e.preventDefault();
-
-  const searchQuery = e.currentTarget.elements.searchQuery.value;
-
-  // const options = {
-  //   headers: {
-  //     Authorization: 'MY_API',
-  //   },
-  // };
-  const url = `${BASE_URL}?key=${MY_API}&q=${searchQuery}&image_type=photo&orientation=horizontal&safesearch=true&per_page=10&page=1`;
-
-  try {
-    const fetchByUrl = await axios
-      .get(url)
-      .then(r => r.json())
-      .then(console.log);
-    const information = await fetchByUrl.json();
-    return information;
-  } catch (error) {
-    Notiflix.Notify.failure(
-      'Sorry, there are no images matching your search query. Please try again.'
-    );
-  }
+  newsApiService.query = e.currentTarget.elements.searchQuery.value;
+  newsApiService.resetPage();
+  newsApiService.fetchArticles().then;
 }
-function renderList(pictures) {
-  if (!gallery) {
-  }
-  const markup = pictures
+
+function loadMore() {
+  newsApiService.fetchArticles();
+}
+
+fetchArticles()
+  .then(pictures => renderList(pictures))
+  .catch(error => console.log(error));
+// const searchSubmitPictures = e => {
+//   e.preventDefault();
+// };
+
+const renderList = (array, container) => {
+  const markup = array
     .map(picture => {
       const {
         id,
@@ -58,21 +46,25 @@ function renderList(pictures) {
         downloads,
       } = picture;
       return `
-      <div class="gallery">
-      <a class="gallery__link" href="${largeImageURL}">
-        <div class="gallery-item" id="${id}">
-          <img class="gallery-item__img" src="${webformatURL}" alt="${tags}" loading="lazy" />
-          <div class="info">
-            <p class="info-item"><b>Likes</b>${likes}</p>
-            <p class="info-item"><b>Views</b>${views}</p>
-            <p class="info-item"><b>Comments</b>${comments}</p>
-            <p class="info-item"><b>Downloads</b>${downloads}</p>
-          </div>
-        </div>
-      </a>
-      </div>
-    `;
+        <div class="photo-card" id="${id}">
+        <a class="gallery__link" href="${largeImageURL}">
+        <img class="gallery-item__img" src="${webformatURL}" alt="${tags}" loading="lazy" />
+    <div class="info">
+      <p class="info-item">
+        <b>Likes ${likes}</b>
+      </p>
+      <p class="info-item">
+        <b>Views ${views}</b>
+      </p>
+      <p class="info-item">
+        <b>Comments ${comments}</b>
+      </p>
+      <p class="info-item">
+        <b>Downloads ${downloads}</b>
+      </p>
+    </div>
+  </div>`;
     })
     .join('');
-  galleryFill.innerHTML = markup;
-}
+  container.insertAdjacentHTML('beforeend', markup);
+};
