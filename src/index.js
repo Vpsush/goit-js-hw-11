@@ -1,5 +1,5 @@
 import './sass/_common.scss';
-import { fetchArticles } from './api-service';
+// import { fetchArticles } from './api-service';
 import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import NewsApiService from './api-service';
