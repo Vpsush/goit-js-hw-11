@@ -24,7 +24,7 @@ function loadMore() {
   newsApiService.fetchArticles();
 }
 NewsApiService()
-  .then(pictures => renderList(pictures, array))
+  .then(pictures => renderList(pictures))
   .catch(error => console.log(error));
 // const searchSubmitPictures = e => {
 //   e.preventDefault();
