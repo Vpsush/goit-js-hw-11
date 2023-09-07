@@ -29,7 +29,6 @@ fetchArticles()
 // const searchSubmitPictures = e => {
 //   e.preventDefault();
 // };
-
 const renderList = (array, container) => {
   const markup = array
     .map(picture => {
