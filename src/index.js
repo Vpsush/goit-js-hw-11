@@ -1,7 +1,7 @@
 import './sass/_common.scss';
 import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
-import { newsApiService } from './api-service';
+import { NewsApiService } from './api-service';
 
 // axios.defaults.headers.common['x-api-key'] =
 //   '39094662-f0479bb8b89274a4b188f6f08';
