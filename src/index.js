@@ -1,8 +1,8 @@
 import './sass/_common.scss';
-// import { fetchArticles } from './api-service';
 import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import NewsApiService from './api-service';
+
 // axios.defaults.headers.common['x-api-key'] =
 //   '39094662-f0479bb8b89274a4b188f6f08';
 
@@ -23,8 +23,8 @@ function searchSubmitPictures(e) {
 function loadMore() {
   newsApiService.fetchArticles();
 }
-fetchArticles()
-  .then(pictures => renderList(pictures))
+NewsApiService()
+  .then(pictures => renderList(pictures, array))
   .catch(error => console.log(error));
 // const searchSubmitPictures = e => {
 //   e.preventDefault();

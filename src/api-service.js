@@ -10,7 +10,7 @@ axios.defaults.params = {
   per_page: 40,
 };
 
-export default class newsApiService {
+export class NewsApiService {
   constructor() {
     this.searchQuery = '';
     this.page = 1;
