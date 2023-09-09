@@ -2,6 +2,7 @@
 import Notify from 'notiflix';
 import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
+import 'simplelightbox/dist/simple-lightbox.min.css';
 import { NewsApiService } from './api-service';
 
 const writeInForm = document.querySelector('#search-form');
