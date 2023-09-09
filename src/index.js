@@ -1,10 +1,7 @@
-import './sass/_common.scss';
+// import './sass/_common.scss';
 import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import { NewsApiService } from './api-service';
-
-// axios.defaults.headers.common['x-api-key'] =
-//   '39094662-f0479bb8b89274a4b188f6f08';
 
 const writeInForm = document.querySelector('#search-form');
 const galleryFill = document.querySelector('.gallery');
@@ -18,17 +15,19 @@ function searchSubmitPictures(e) {
   e.preventDefault();
   newsApiService.query = e.currentTarget.elements.searchQuery.value;
   newsApiService.resetPage();
-  newsApiService.fetchArticles().then;
+  newsApiService
+    .fetchArticles()
+    .then(pictures => renderList(pictures, galleryFill))
+    .catch(error => console.log(error));
 }
+
 function loadMore() {
-  newsApiService.fetchArticles();
+  newsApiService
+    .fetchArticles()
+    .then(pictures => renderList(pictures, galleryFill))
+    .catch(error => console.log(error));
 }
-NewsApiService()
-  .then(pictures => renderList(pictures))
-  .catch(error => console.log(error));
-// const searchSubmitPictures = e => {
-//   e.preventDefault();
-// };
+
 const renderList = (array, container) => {
   const markup = array
     .map(picture => {
