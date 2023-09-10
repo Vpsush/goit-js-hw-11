@@ -107,32 +107,6 @@ const newGallery = new SimpleLightbox('.photo-card a', {
   captionDelay: 250,
 });
 
-// async function fetchGallery(e) {
-//   // e.preventDefault();
-//   // loadMoreBtn.classList.add('is-hidden');
-//   const result = await newsApiService.fetchGallery();
-//   const { hits, total } = result;
-//   isShown += hits.length;
-//   if (!hits.length) {
-//     Notify.failure(
-//       `Sorry, there are no images matching your search query. Please try again.`
-//     );
-//     return;
-//   }
-
-//   renderList(hits);
-//   isShown += hits.length;
-
-//   if (isShown < total) {
-//     Notify.success(`Hooray! We found ${total} images.`);
-//     // loadMoreBtn.classList.remove('is-hidden');
-//   }
-//   if (isShown >= total) {
-//     Notiflix.Notify.failure(
-//       `We're sorry, but you've reached the end of search results.`
-//     );
-//   }
-// }
 async function fetchGallery(e) {
   const result = await newsApiService.fetchGallery();
   const { hits, total } = result;
