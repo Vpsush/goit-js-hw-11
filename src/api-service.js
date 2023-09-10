@@ -10,7 +10,7 @@ axios.defaults.params = {
   image_type: 'photo',
   orientation: 'horizontal',
   safesearch: true,
-  per_page: 40,
+  per_page: 5,
 };
 
 export class NewsApiService {

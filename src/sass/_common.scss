@@ -6,6 +6,7 @@
   margin-top: 20px;
   gap: 20px;
   flex-wrap: wrap;
+  // background-color: aquamarine;
 }
 .info {
   display: flex;
@@ -13,10 +14,13 @@
   justify-content: space-between;
   margin: 5px;
 }
-.info-item {
+.action {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin-left: 5px;
 }
 .is-hidden {
   position: absolute;
@@ -29,4 +33,13 @@
   clip-path: inset(100%);
   clip: rect(0 0 0 0);
   overflow: hidden;
+}
+.button {
+  display: block;
+}
+.button.is-hidden {
+  display: none;
+}
+.button > .spinner.is-hidden {
+  display: none;
 }

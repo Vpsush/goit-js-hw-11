@@ -11,14 +11,14 @@ const loadMoreBtn = document.querySelector('.load-more');
 const newsApiService = new NewsApiService();
 let isShown = 0;
 
-loadMoreBtn.classList.replace('is-hidden', 'loadMoreBtn');
+// loadMoreBtn.classList.replace('is-hidden', 'loadMoreBtn');
 
 writeInForm.addEventListener('submit', searchSubmitPictures);
 loadMoreBtn.addEventListener('click', loadMore);
 
 function searchSubmitPictures(e) {
   e.preventDefault();
-  loadMoreBtn.classList.replace('is-hidden', 'loadMoreBtn');
+  clearPictureContainer();
 
   newsApiService.query = e.currentTarget.elements.searchQuery.value.trim();
   newsApiService.resetPage();
@@ -27,40 +27,22 @@ function searchSubmitPictures(e) {
     Notiflix.Notify.warning('Please, fill the main field');
     return;
   }
-
-  // fetchGallery();
+  newGallery.refresh();
 
   newsApiService
     .fetchArticles()
     .then(pictures => renderList(pictures, galleryFill))
     .catch(error => console.log(error));
-
-  const result = newsApiService.fetchArticles();
-  const { hits, total } = result;
-  isShown += hits.length;
-  if (!hits.length) {
-    Notify.failure(
-      `Sorry, there are no images matching your search query. Please try again.`
-    );
-
-    if (isShown < hits.length) {
-      Notify.success(`Hooray! We found ${total} images.`);
-    }
-    if (isShown >= hits.length) {
-      Notiflix.Notify.failure(
-        `We're sorry, but you've reached the end of search results.`
-      );
-    }
-  }
-  loadMoreBtn.classList.replace('is-hidden', 'loadMoreBtn');
 }
 
-function loadMore(e) {
+async function loadMore(e) {
   e.preventDefault();
-  newsApiService
+
+  await newsApiService
     .fetchArticles()
     .then(pictures => renderList(pictures, galleryFill))
     .catch(error => console.log(error));
+  fetchGallery();
 }
 
 const renderList = (array, container) => {
@@ -83,42 +65,63 @@ const renderList = (array, container) => {
         </a>
     <div class="info">
       <p class="info-item">
-        <b>Likes ${likes}</b>
+        <b class="action">Likes <span class="numb"> ${likes}</span></b>
       </p>
       <p class="info-item">
-        <b>Views ${views}</b>
+        <b class="action">Views <span class="numb">${views}</span></b>
       </p>
       <p class="info-item">
-        <b>Comments ${comments}</b>
+        <b class="action">Comments <span class="numb">${comments}</span></b>
       </p>
       <p class="info-item">
-        <b>Downloads ${downloads}</b>
+        <b class="action">Downloads <span class="numb">${downloads}</span></b>
       </p>
     </div>
   </div>`;
     })
     .join('');
   container.insertAdjacentHTML('beforeend', markup);
+  newGallery.refresh();
 };
-// async function fetchGallery(e) {
-//   e.preventDefault();
-// const result = await newsApiService.fetchGallery();
-// const { hits, total } = result;
-// isShown += hits.length;
-// if (!hits.length) {
-//   Notify.failure(
-//     `Sorry, there are no images matching your search query. Please try again.`
-//   );
 
-//   if (isShown < hits.length) {
-//     Notify.success(`Hooray! We found ${total} images.`);
-//   }
-//   if (isShown >= hits.length) {
-//     Notiflix.Notify.failure(
-//       `We're sorry, but you've reached the end of search results.`
-//     );
-//   }
-// }
+function clearPictureContainer() {
+  galleryFill.innerHTML = '';
+}
+
+const newGallery = new SimpleLightbox('.photo-card a', {
+  captionsData: 'alt',
+  captionPosition: 'bottom',
+  captionDelay: 250,
+});
+
+async function fetchGallery(e) {
+  // e.preventDefault();
+  // loadMoreBtn.classList.add('is-hidden');
+  const result = await newsApiService.fetchGallery();
+  const { hits, total } = result;
+  isShown += hits.length;
+  if (!hits.length) {
+    Notify.failure(
+      `Sorry, there are no images matching your search query. Please try again.`
+    );
+    return;
+  }
+
+  renderList(hits);
+  isShown += hits.length;
+
+  if (isShown < total) {
+    Notify.success(`Hooray! We found ${total} images.`);
+    // loadMoreBtn.classList.remove('is-hidden');
+  }
+  if (isShown >= total) {
+    Notiflix.Notify.failure(
+      `We're sorry, but you've reached the end of search results.`
+    );
+  }
+}
+
+//
 
 // const { height: cardHeight } = document
 //   .querySelector('.gallery')
