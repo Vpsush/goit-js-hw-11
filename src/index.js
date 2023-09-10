@@ -20,6 +20,9 @@ function searchSubmitPictures(e) {
   e.preventDefault();
   clearPictureContainer();
 
+  // Reset the isShown counter
+  isShown = 0;
+
   newsApiService.query = e.currentTarget.elements.searchQuery.value.trim();
   newsApiService.resetPage();
 
@@ -31,7 +34,17 @@ function searchSubmitPictures(e) {
 
   newsApiService
     .fetchArticles()
-    .then(pictures => renderList(pictures, galleryFill))
+    .then(pictures => {
+      // Check if there are no images and show a message
+      if (pictures.length === 0) {
+        Notiflix.Notify.failure(
+          `Sorry, there are no images matching your search query. Please try again.`
+        );
+        return;
+      } else {
+        renderList(pictures, galleryFill);
+      }
+    })
     .catch(error => console.log(error));
 }
 
@@ -94,9 +107,33 @@ const newGallery = new SimpleLightbox('.photo-card a', {
   captionDelay: 250,
 });
 
+// async function fetchGallery(e) {
+//   // e.preventDefault();
+//   // loadMoreBtn.classList.add('is-hidden');
+//   const result = await newsApiService.fetchGallery();
+//   const { hits, total } = result;
+//   isShown += hits.length;
+//   if (!hits.length) {
+//     Notify.failure(
+//       `Sorry, there are no images matching your search query. Please try again.`
+//     );
+//     return;
+//   }
+
+//   renderList(hits);
+//   isShown += hits.length;
+
+//   if (isShown < total) {
+//     Notify.success(`Hooray! We found ${total} images.`);
+//     // loadMoreBtn.classList.remove('is-hidden');
+//   }
+//   if (isShown >= total) {
+//     Notiflix.Notify.failure(
+//       `We're sorry, but you've reached the end of search results.`
+//     );
+//   }
+// }
 async function fetchGallery(e) {
-  // e.preventDefault();
-  // loadMoreBtn.classList.add('is-hidden');
   const result = await newsApiService.fetchGallery();
   const { hits, total } = result;
   isShown += hits.length;
@@ -112,7 +149,6 @@ async function fetchGallery(e) {
 
   if (isShown < total) {
     Notify.success(`Hooray! We found ${total} images.`);
-    // loadMoreBtn.classList.remove('is-hidden');
   }
   if (isShown >= total) {
     Notiflix.Notify.failure(
