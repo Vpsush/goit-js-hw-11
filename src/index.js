@@ -9,7 +9,16 @@ const writeInForm = document.querySelector('#search-form');
 const galleryFill = document.querySelector('.gallery');
 const loadMoreBtn = document.querySelector('.load-more');
 const newsApiService = new NewsApiService();
+const guardEl = document.querySelector('.js-guard');
 let isShown = 0;
+
+const options = {
+  root: null,
+  rootMargin: '300px',
+  threshold: 0,
+};
+
+const observer = new IntersectionObserver(loadMore, options);
 
 // loadMoreBtn.classList.replace('is-hidden', 'loadMoreBtn');
 
@@ -20,7 +29,6 @@ function searchSubmitPictures(e) {
   e.preventDefault();
   clearPictureContainer();
 
-  // Reset the isShown counter
   isShown = 0;
 
   newsApiService.query = e.currentTarget.elements.searchQuery.value.trim();
@@ -49,9 +57,10 @@ function searchSubmitPictures(e) {
 }
 
 async function loadMore(e) {
-  e.preventDefault();
+  // e.preventDefault();
 
   await newsApiService
+    .incrementPage()
     .fetchArticles()
     .then(pictures => renderList(pictures, galleryFill))
     .catch(error => console.log(error));
