@@ -9,76 +9,14 @@ const writeInForm = document.querySelector('#search-form');
 const galleryFill = document.querySelector('.gallery');
 const loadMoreBtn = document.querySelector('.load-more');
 const newsApiService = new NewsApiService();
-const guardEl = document.querySelector('.js-guard');
+
 let isShown = 0;
-
-// const options = {
-//   root: null,
-//   rootMargin: '300px',
-//   threshold: 0,
-// };
-
-// const observer = new IntersectionObserver(loadMore, options);
-
-// loadMoreBtn.classList.replace('is-hidden', 'loadMoreBtn');
-
-// writeInForm.addEventListener('submit', searchSubmitPictures);
-// loadMoreBtn.addEventListener('click', loadMore);
-
-// function searchSubmitPictures(e) {
-//   e.preventDefault();
-//   clearPictureContainer();
-
-//   isShown = 0;
-
-//   newsApiService.query = e.currentTarget.elements.searchQuery.value.trim();
-//   newsApiService.resetPage();
-
-//   if (newsApiService.query === '') {
-//     Notiflix.Notify.warning('Please, fill the main field');
-//     return;
-//   }
-//   newGallery.refresh();
-
-//   newsApiService
-//     .fetchArticles()
-//     .then(pictures => {
-//       // Check if there are no images and show a message
-//       if (pictures.length === 0) {
-//         Notiflix.Notify.failure(
-//           `Sorry, there are no images matching your search query. Please try again.`
-//         );
-//         return;
-//       } else {
-//         renderList(pictures, galleryFill);
-//       }
-//     })
-//     .catch(error => console.log(error));
-// }
-
-// async function loadMore(e) {
-//   // e.preventDefault();
-
-//   await newsApiService
-//     // .incrementPage()
-//     .fetchArticles()
-//     .then(pictures => renderList(pictures, galleryFill))
-//     .catch(error => console.log(error));
-//   fetchGallery();
-// }
 
 writeInForm.addEventListener('submit', searchSubmitPictures);
 
 // loadMoreBtn.addEventListener('click', loadMore);
-
 window.addEventListener('scroll', () => {
-  const scrollY = window.scrollY;
-  const windowHeight = window.innerHeight;
-  const documentHeight = document.documentElement.scrollHeight;
-
-  const threshold = 0.1 * windowHeight;
-
-  if (scrollY + windowHeight >= documentHeight - threshold) {
+  if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
     loadMore();
   }
 });
@@ -115,13 +53,12 @@ function searchSubmitPictures(e) {
 }
 
 async function loadMore() {
-  // Check if the button is disabled, if so, return
   if (loadMoreBtn.disabled) {
     return;
   }
 
   await newsApiService
-    // .incrementPage()
+
     .fetchArticles()
     .then(pictures => {
       if (pictures.length > 0) {
@@ -207,14 +144,3 @@ async function fetchGallery(e) {
     );
   }
 }
-
-//
-
-// const { height: cardHeight } = document
-//   .querySelector('.gallery')
-//   .firstElementChild.fetchArticles();
-
-// window.scrollBy({
-//   top: cardHeight * 2,
-//   behavior: 'smooth',
-// });

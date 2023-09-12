@@ -26,9 +26,6 @@ export class NewsApiService {
       this.page += 1;
       return fetchByUrl.data.hits;
     } catch (error) {
-      // Notiflix.Notify.failure(
-      //   'Sorry, there are no images matching your search query. Please try again.'
-      // );
       throw error;
     }
   }
