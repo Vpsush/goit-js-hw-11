@@ -16,7 +16,7 @@ writeInForm.addEventListener('submit', searchSubmitPictures);
 
 // loadMoreBtn.addEventListener('click', loadMore);
 
-function searchSubmitPictures(e) {
+async function searchSubmitPictures(e) {
   e.preventDefault();
   clearPictureContainer();
 
@@ -31,7 +31,7 @@ function searchSubmitPictures(e) {
   }
   newGallery.refresh();
 
-  newsApiService
+  await newsApiService
     .fetchArticles()
     .then(pictures => {
       // Check if there are no images and show a message
@@ -48,23 +48,26 @@ function searchSubmitPictures(e) {
 }
 
 async function loadMore() {
-  // if (loadMoreBtn.disabled) {
-  //   return;
-  // }
-
-  await newsApiService
-
-    .fetchArticles()
-    .then(pictures => {
-      if (pictures.length > 0) {
-        renderList(pictures, galleryFill);
-      } else {
-        loadMoreBtn.disabled = true;
-      }
-    })
-    .catch(error => console.log(error));
-  fetchGallery();
+  try {
+    const pictures = await newsApiService.fetchArticles();
+    // .then(pictures => {
+    if (pictures.length > 0) {
+      renderList(pictures, galleryFill);
+      return;
+      // } else {
+      //   loadMoreBtn.disabled = true;
+    }
+  } catch (error) {
+    console.log(error);
+  }
+  fetchInGallery();
 }
+
+window.addEventListener('scroll', () => {
+  if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+    loadMore();
+  }
+});
 
 const renderList = (array, container) => {
   const markup = array
@@ -115,8 +118,8 @@ const newGallery = new SimpleLightbox('.photo-card a', {
   captionDelay: 250,
 });
 
-async function fetchGallery(e) {
-  const result = await newsApiService.fetchGallery();
+async function fetchInGallery() {
+  const result = await newsApiService.fetchArticles();
   const { hits, total } = result;
   isShown += hits.length;
   if (!hits.length) {
@@ -138,8 +141,3 @@ async function fetchGallery(e) {
     );
   }
 }
-window.addEventListener('scroll', () => {
-  if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-    loadMore();
-  }
-});
