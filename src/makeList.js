@@ -1,4 +1,4 @@
-import { newGallery } from './index';
+// import { newGallery } from './index';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 
