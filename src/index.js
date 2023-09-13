@@ -4,6 +4,7 @@ import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
 import 'simplelightbox/dist/simple-lightbox.min.css';
 import { NewsApiService } from './api-service';
+import { renderList } from './makeList';
 
 const writeInForm = document.querySelector('#search-form');
 const galleryFill = document.querySelector('.gallery');
@@ -53,9 +54,9 @@ function searchSubmitPictures(e) {
 }
 
 async function loadMore() {
-  if (loadMoreBtn.disabled) {
-    return;
-  }
+  // if (loadMoreBtn.disabled) {
+  //   return;
+  // }
 
   await newsApiService
 
@@ -63,53 +64,52 @@ async function loadMore() {
     .then(pictures => {
       if (pictures.length > 0) {
         renderList(pictures, galleryFill);
+      } else {
+        loadMoreBtn.disabled = true;
       }
-      // } else {
-      //   loadMoreBtn.disabled = true; // Disable the button
-      // }
     })
     .catch(error => console.log(error));
   fetchGallery();
 }
 
-const renderList = (array, container) => {
-  const markup = array
-    .map(picture => {
-      const {
-        id,
-        largeImageURL,
-        webformatURL,
-        tags,
-        likes,
-        views,
-        comments,
-        downloads,
-      } = picture;
-      return `
-        <div class="photo-card" id="${id}">
-        <a class="gallery__link" href="${largeImageURL}" >
-        <img class="gallery-item__img" src="${webformatURL}" alt="${tags}" loading="lazy" width = 400 height=300/>
-        </a>
-    <div class="info">
-      <p class="info-item">
-        <b class="action">Likes <span class="numb"> ${likes}</span></b>
-      </p>
-      <p class="info-item">
-        <b class="action">Views <span class="numb">${views}</span></b>
-      </p>
-      <p class="info-item">
-        <b class="action">Comments <span class="numb">${comments}</span></b>
-      </p>
-      <p class="info-item">
-        <b class="action">Downloads <span class="numb">${downloads}</span></b>
-      </p>
-    </div>
-  </div>`;
-    })
-    .join('');
-  container.insertAdjacentHTML('beforeend', markup);
-  newGallery.refresh();
-};
+// const renderList = (array, container) => {
+//   const markup = array
+//     .map(picture => {
+//       const {
+//         id,
+//         largeImageURL,
+//         webformatURL,
+//         tags,
+//         likes,
+//         views,
+//         comments,
+//         downloads,
+//       } = picture;
+//       return `
+//         <div class="photo-card" id="${id}">
+//         <a class="gallery__link" href="${largeImageURL}" >
+//         <img class="gallery-item__img" src="${webformatURL}" alt="${tags}" loading="lazy" width = 400 height=300/>
+//         </a>
+//     <div class="info">
+//       <p class="info-item">
+//         <b class="action">Likes <span class="numb"> ${likes}</span></b>
+//       </p>
+//       <p class="info-item">
+//         <b class="action">Views <span class="numb">${views}</span></b>
+//       </p>
+//       <p class="info-item">
+//         <b class="action">Comments <span class="numb">${comments}</span></b>
+//       </p>
+//       <p class="info-item">
+//         <b class="action">Downloads <span class="numb">${downloads}</span></b>
+//       </p>
+//     </div>
+//   </div>`;
+//     })
+//     .join('');
+//   container.insertAdjacentHTML('beforeend', markup);
+//   newGallery.refresh();
+// };
 
 function clearPictureContainer() {
   galleryFill.innerHTML = '';
