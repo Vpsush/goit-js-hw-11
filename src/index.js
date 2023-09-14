@@ -105,10 +105,10 @@ async function fetchInGallery() {
     Notiflix.Notify.failure(
       `We're sorry, but you've reached the end of search results.`
     );
+    window.removeEventListener('scroll', () => {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+        loadMore();
+      }
+    });
   }
-  window.removeEventListener('scroll', () => {
-    if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-      loadMore();
-    }
-  });
 }
