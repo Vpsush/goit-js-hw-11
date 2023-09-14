@@ -35,14 +35,20 @@ async function searchSubmitPictures(e) {
     .fetchArticles()
     .then(pictures => {
       const markup = renderList(pictures);
+      console.log(pictures);
       galleryFill.insertAdjacentHTML('beforeend', markup);
-      // Check if there are no images and show a message
+
       if (pictures.length === 0) {
         Notiflix.Notify.failure(
           `Sorry, there are no images matching your search query. Please try again.`
         );
         return;
-      } else {
+      }
+      // if (pictures.length === totalHits) {
+      //   Notify.success(`Hooray! We found ${totalHits} images.`);
+      //   return;
+      // }
+      else {
         renderList(pictures, galleryFill);
       }
     })
@@ -54,24 +60,33 @@ async function loadMore() {
     const pictures = await newsApiService.fetchArticles();
     const markup = renderList(pictures);
     galleryFill.insertAdjacentHTML('beforeend', markup);
-    // .then(pictures => {
     if (pictures.length > 0) {
       renderList(pictures, galleryFill);
       return;
-      // } else {
-      //   loadMoreBtn.disabled = true;
     }
+    // if (pictures.length === totalHits) {
+    //   window.removeEventListener('scroll', scrolling);
+    //   return;
+    // }
   } catch (error) {
-    console.log(error);
+    Notiflix.Notify.failure(
+      `We're sorry, but you've reached the end of search results.`
+    );
+  } finally {
+    if (pictures.length === totalHits) {
+      window.removeEventListener('scroll', scrolling);
+      return;
+    }
   }
-  fetchInGallery();
+  // fetchInGallery();
 }
 
-window.addEventListener('scroll', () => {
+window.addEventListener('scroll', scrolling);
+function scrolling() {
   if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
     loadMore();
   }
-});
+}
 
 function clearPictureContainer() {
   galleryFill.innerHTML = '';
@@ -83,31 +98,26 @@ const newGallery = new SimpleLightbox('.photo-card a', {
   captionDelay: 250,
 });
 
-async function fetchInGallery() {
-  const result = await newsApiService.fetchArticles();
-  const { hits, total } = result;
-  isShown += hits.length;
-  if (!hits.length) {
-    Notify.failure(
-      `Sorry, there are no images matching your search query. Please try again.`
-    );
-    return;
-  }
+// async function fetchInGallery() {
+//   const result = await newsApiService.fetchArticles();
+//   const { hits, total } = result;
+//   isShown += hits.length;
+//   if (!hits.length) {
+//     Notify.failure(
+//       `Sorry, there are no images matching your search query. Please try again.`
+//     );
+//     return;
+//   }
 
-  renderList(hits);
-  isShown += hits.length;
+//   renderList(hits);
+//   isShown += hits.length;
 
-  if (isShown < total) {
-    Notify.success(`Hooray! We found ${total} images.`);
-  }
-  if (isShown >= total) {
-    Notiflix.Notify.failure(
-      `We're sorry, but you've reached the end of search results.`
-    );
-    window.removeEventListener('scroll', () => {
-      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-        loadMore();
-      }
-    });
-  }
-}
+//   if (isShown < total) {
+//     Notify.success(`Hooray! We found ${total} images.`);
+//   }
+//   if (isShown >= total) {
+//     Notiflix.Notify.failure(
+//       `We're sorry, but you've reached the end of search results.`
+//     );
+//    }
+// }
