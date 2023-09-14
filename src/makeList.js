@@ -41,11 +41,11 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 //   newGallery.refresh();
 // };
 
-const newGallery = new SimpleLightbox('.photo-card a', {
-  captionsData: 'alt',
-  captionPosition: 'bottom',
-  captionDelay: 250,
-});
+// export const newGallery = new SimpleLightbox('.photo-card a', {
+//   captionsData: 'alt',
+//   captionPosition: 'bottom',
+//   captionDelay: 250,
+// });
 
 export function renderList(markup) {
   return markup
@@ -84,5 +84,5 @@ export function renderList(markup) {
     )
     .join('');
   //   container.insertAdjacentHTML('beforeend', markup);
-  newGallery.refresh();
+  // newGallery.refresh();
 }

@@ -1,4 +1,3 @@
-// import './sass/_common.scss';
 import Notify from 'notiflix';
 import Notiflix from 'notiflix';
 import SimpleLightbox from 'simplelightbox';
