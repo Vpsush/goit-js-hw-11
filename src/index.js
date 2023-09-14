@@ -43,12 +43,7 @@ async function searchSubmitPictures(e) {
           `Sorry, there are no images matching your search query. Please try again.`
         );
         return;
-      }
-      // if (pictures.length === totalHits) {
-      //   Notify.success(`Hooray! We found ${totalHits} images.`);
-      //   return;
-      // }
-      else {
+      } else {
         renderList(pictures, galleryFill);
       }
     })
@@ -61,8 +56,6 @@ async function loadMore() {
     const markup = renderList(pictures);
     galleryFill.insertAdjacentHTML('beforeend', markup);
     if (pictures.length > 0) {
-      Notify.success(`Hooray! We found ${this.totalHits} images.`);
-      //   return;
       renderList(pictures, galleryFill);
       return;
     }
@@ -75,10 +68,10 @@ async function loadMore() {
       `We're sorry, but you've reached the end of search results.`
     );
   } finally {
-    if (pictures.length === totalHits) {
-      window.removeEventListener('scroll', scrolling);
-      return;
-    }
+    // if (pictures.length === totalHits) {
+    window.removeEventListener('scroll', scrolling);
+    return;
+    // }
   }
   // fetchInGallery();
 }
