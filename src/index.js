@@ -61,6 +61,8 @@ async function loadMore() {
     const markup = renderList(pictures);
     galleryFill.insertAdjacentHTML('beforeend', markup);
     if (pictures.length > 0) {
+      Notify.success(`Hooray! We found ${this.totalHits} images.`);
+      //   return;
       renderList(pictures, galleryFill);
       return;
     }
