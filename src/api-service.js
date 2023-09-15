@@ -24,7 +24,7 @@ export class NewsApiService {
       const url = `?&q=${this.searchQuery}&page=${this.page}`;
       const fetchByUrl = await axios.get(url);
       this.page += 1;
-      return fetchByUrl.data.hits;
+      return fetchByUrl.data;
     } catch (error) {
       throw error;
     }
@@ -36,6 +36,10 @@ export class NewsApiService {
 
   get query() {
     return this.searchQuery;
+  }
+
+  getPage() {
+    return this.page;
   }
 
   set query(newQuery) {
